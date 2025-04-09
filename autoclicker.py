@@ -2,6 +2,8 @@ import tkinter as tk
 import pyautogui
 import asyncio
 import keyboard
+import os
+import sys
 
 class main():
     def __init__(self):
@@ -11,7 +13,7 @@ class main():
         self.window.title(f"AutoClicker {self.VERSION}")
         self.window.minsize(450, 325)
         self.window.maxsize(450, 325)
-        self.window.geometry("300x300+50+50")
+        self.window.geometry("300x300")
 
         self.clicking = False
         self.totalClickingTime = 0
@@ -71,6 +73,24 @@ class main():
         self.hotkeyButton = tk.Button(self.window, text="Hotkey setting", width=25, height=2, bg="white", command=self.menu_hotkeys)
         self.hotkeyButton.place(relx=0.25, rely=0.92, anchor=tk.CENTER)
 
+
+        clickingTypeFrame = tk.Frame(self.window, width=215, height=100, highlightbackground="grey", highlightthickness=0.5)
+        clickingTypeFrame.pack(padx=10, pady=5, anchor="nw")
+
+        clickingTypeLabel = tk.Label(self.window, text="Click Options")
+        clickingTypeLabel.place(relx=0.13, rely=0.26, anchor=tk.CENTER)
+
+        options = tk.StringVar()
+        self.mouseButtonDropDown = tk.OptionMenu(clickingTypeFrame, options, 'Left', 'Right', 'Middle', command=self.mouseButtonDropDown)   
+        options.set('Left')
+        self.mouseButtonDropDown.place(relx=0.6, rely=0.3, anchor=tk.CENTER)
+
+        mouseButtonLabel = tk.Label(clickingTypeFrame, text="Mouse Button:")
+        mouseButtonLabel.place(relx=0.21, rely=0.3, anchor=tk.CENTER)
+    
+    def mouseButtonDropDown(choice):
+        print("Selected:", choice)
+
     def validateInput(self, input_value):
         return input_value.isdigit()
 
@@ -111,7 +131,11 @@ class main():
     def menu_hotkeys(self):
         hotkey_window = tk.Toplevel(self.window)
         hotkey_window.title("Hotkey Settings")
-        hotkey_window.geometry("225x100")
+
+        self.window.update_idletasks()
+        pos_x = self.window.winfo_x() + (self.window.winfo_width() // 2) - (225 // 2)
+        pos_y = self.window.winfo_y() + (self.window.winfo_height() // 2) - (225 // 2)
+        hotkey_window.geometry(f"225x100+{pos_x}+{pos_y}")
 
         self.new_hotkey = ""
 
